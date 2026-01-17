@@ -90,6 +90,13 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
   const [selectedSeason, setSelectedSeason] = useState<number>(1);
   const [seasonsLoaded, setSeasonsLoaded] = useState(false);
 
+  // 拖动滚动状态
+  const [isDragging, setIsDragging] = useState(false);
+  const [isMouseDown, setIsMouseDown] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+  const episodesScrollRef = React.useRef<HTMLDivElement>(null);
+
   // 确保组件在客户端挂载后才渲染 Portal
   useEffect(() => {
     setMounted(true);
@@ -495,6 +502,54 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
     }
   };
 
+  // 拖动滚动处理函数
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (!episodesScrollRef.current) return;
+    setIsMouseDown(true);
+    setStartX(e.pageX - episodesScrollRef.current.offsetLeft);
+    setScrollLeft(episodesScrollRef.current.scrollLeft);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isMouseDown || !episodesScrollRef.current) return;
+
+    const x = e.pageX - episodesScrollRef.current.offsetLeft;
+    const distance = Math.abs(x - startX);
+
+    // 只有移动超过5px才进入拖动模式
+    if (distance > 5 && !isDragging) {
+      setIsDragging(true);
+      episodesScrollRef.current.style.cursor = 'grabbing';
+      episodesScrollRef.current.style.userSelect = 'none';
+    }
+
+    if (isDragging) {
+      e.preventDefault();
+      const walk = (x - startX) * 2; // 滚动速度倍数
+      episodesScrollRef.current.scrollLeft = scrollLeft - walk;
+    }
+  };
+
+  const handleMouseUp = () => {
+    setIsMouseDown(false);
+    setIsDragging(false);
+    if (episodesScrollRef.current) {
+      episodesScrollRef.current.style.cursor = 'grab';
+      episodesScrollRef.current.style.userSelect = 'auto';
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (isMouseDown || isDragging) {
+      setIsMouseDown(false);
+      setIsDragging(false);
+      if (episodesScrollRef.current) {
+        episodesScrollRef.current.style.cursor = 'grab';
+        episodesScrollRef.current.style.userSelect = 'auto';
+      }
+    }
+  };
+
   if (!isVisible || !mounted) return null;
 
   const content = (
@@ -552,7 +607,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
               <div className="flex gap-6 mb-6">
                 {detailData.poster && (
                   <div className="relative w-32 h-48 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800 flex-shrink-0">
-                    <Image src={detailData.poster} alt={detailData.title} fill className="object-cover" />
+                    <Image src={detailData.poster} alt={detailData.title} fill className="object-cover" draggable={false} />
                   </div>
                 )}
                 <div className="flex-1 min-w-0">
@@ -737,6 +792,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                                       alt={season.name}
                                       fill
                                       className="object-cover"
+                                      draggable={false}
                                     />
                                   </div>
                                 )}
@@ -760,7 +816,18 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                           <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
                             {seasonData.seasons.find((s: any) => s.season_number === selectedSeason)?.name || `第${selectedSeason}季`}
                           </h4>
-                          <div className="overflow-x-auto -mx-6 px-6">
+                          <div
+                            ref={episodesScrollRef}
+                            onMouseDown={handleMouseDown}
+                            onMouseMove={handleMouseMove}
+                            onMouseUp={handleMouseUp}
+                            onMouseLeave={handleMouseLeave}
+                            className="overflow-x-auto -mx-6 px-6 cursor-grab active:cursor-grabbing"
+                            style={{
+                              scrollbarWidth: 'thin',
+                              scrollBehavior: isDragging ? 'auto' : 'smooth'
+                            }}
+                          >
                             <div className="flex gap-3 pb-2">
                               {seasonData.episodes.map((episode: Episode) => {
                                 const isExpanded = expandedEpisodes.has(episode.id);
@@ -768,6 +835,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                                   <div
                                     key={episode.id}
                                     className="flex-shrink-0 w-64 p-3 rounded bg-gray-50 dark:bg-gray-800"
+                                    style={{ pointerEvents: isDragging ? 'none' : 'auto' }}
                                   >
                                     {episode.still_path && (
                                       <div className="relative w-full h-36 rounded overflow-hidden bg-gray-200 dark:bg-gray-700 mb-2">
@@ -776,6 +844,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                                           alt={episode.name}
                                           fill
                                           className="object-cover"
+                                          draggable={false}
                                         />
                                       </div>
                                     )}
