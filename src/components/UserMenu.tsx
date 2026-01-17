@@ -12,15 +12,19 @@ import {
   ExternalLink,
   Eye,
   EyeOff,
+  Gauge,
+  Globe,
   Home,
   KeyRound,
   LogOut,
   Mail,
+  MessageSquare,
   MoveDown,
   MoveUp,
   Rss,
   Settings,
   Shield,
+  Sliders,
   Star,
   User,
   X,
@@ -1184,9 +1188,12 @@ export const UserMenu: React.FC = () => {
                 onClick={() => setIsDoubanSectionOpen(!isDoubanSectionOpen)}
                 className='w-full px-3 py-2.5 md:px-4 md:py-3 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-750 transition-colors flex items-center justify-between'
               >
-                <h3 className='text-base font-semibold text-gray-800 dark:text-gray-200'>
-                  网络设置
-                </h3>
+                <div className='flex items-center gap-2'>
+                  <Globe className='w-5 h-5 text-gray-600 dark:text-gray-400' />
+                  <h3 className='text-base font-semibold text-gray-800 dark:text-gray-200'>
+                    网络设置
+                  </h3>
+                </div>
                 {isDoubanSectionOpen ? (
                   <ChevronUp className='w-5 h-5 text-gray-600 dark:text-gray-400' />
                 ) : (
@@ -1435,9 +1442,12 @@ export const UserMenu: React.FC = () => {
                 onClick={() => setIsUsageSectionOpen(!isUsageSectionOpen)}
                 className='w-full px-3 py-2.5 md:px-4 md:py-3 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-750 transition-colors flex items-center justify-between'
               >
-                <h3 className='text-base font-semibold text-gray-800 dark:text-gray-200'>
-                  通用设置
-                </h3>
+                <div className='flex items-center gap-2'>
+                  <Sliders className='w-5 h-5 text-gray-600 dark:text-gray-400' />
+                  <h3 className='text-base font-semibold text-gray-800 dark:text-gray-200'>
+                    通用设置
+                  </h3>
+                </div>
                 {isUsageSectionOpen ? (
                   <ChevronUp className='w-5 h-5 text-gray-600 dark:text-gray-400' />
                 ) : (
@@ -1680,9 +1690,12 @@ export const UserMenu: React.FC = () => {
                 onClick={() => setIsBufferSectionOpen(!isBufferSectionOpen)}
                 className='w-full px-3 py-2.5 md:px-4 md:py-3 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-750 transition-colors flex items-center justify-between'
               >
-                <h3 className='text-base font-semibold text-gray-800 dark:text-gray-200'>
-                  缓冲设置
-                </h3>
+                <div className='flex items-center gap-2'>
+                  <Gauge className='w-5 h-5 text-gray-600 dark:text-gray-400' />
+                  <h3 className='text-base font-semibold text-gray-800 dark:text-gray-200'>
+                    缓冲设置
+                  </h3>
+                </div>
                 {isBufferSectionOpen ? (
                   <ChevronUp className='w-5 h-5 text-gray-600 dark:text-gray-400' />
                 ) : (
@@ -1787,9 +1800,12 @@ export const UserMenu: React.FC = () => {
                 onClick={() => setIsDanmakuSectionOpen(!isDanmakuSectionOpen)}
                 className='w-full px-3 py-2.5 md:px-4 md:py-3 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-750 transition-colors flex items-center justify-between'
               >
-                <h3 className='text-base font-semibold text-gray-800 dark:text-gray-200'>
-                  弹幕设置
-                </h3>
+                <div className='flex items-center gap-2'>
+                  <MessageSquare className='w-5 h-5 text-gray-600 dark:text-gray-400' />
+                  <h3 className='text-base font-semibold text-gray-800 dark:text-gray-200'>
+                    弹幕设置
+                  </h3>
+                </div>
                 {isDanmakuSectionOpen ? (
                   <ChevronUp className='w-5 h-5 text-gray-600 dark:text-gray-400' />
                 ) : (
@@ -1873,9 +1889,12 @@ export const UserMenu: React.FC = () => {
                 onClick={() => setIsHomepageSectionOpen(!isHomepageSectionOpen)}
                 className='w-full px-3 py-2.5 md:px-4 md:py-3 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-750 transition-colors flex items-center justify-between'
               >
-                <h3 className='text-base font-semibold text-gray-800 dark:text-gray-200'>
-                  首页设置
-                </h3>
+                <div className='flex items-center gap-2'>
+                  <Home className='w-5 h-5 text-gray-600 dark:text-gray-400' />
+                  <h3 className='text-base font-semibold text-gray-800 dark:text-gray-200'>
+                    首页设置
+                  </h3>
+                </div>
                 {isHomepageSectionOpen ? (
                   <ChevronUp className='w-5 h-5 text-gray-600 dark:text-gray-400' />
                 ) : (
